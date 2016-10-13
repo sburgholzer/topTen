@@ -255,7 +255,7 @@ name = []
 lat = []
 lon = []
 
-with open('station-lists/sfstns.tbl', 'rt') as station_file:
+with open('/home/sburgholzer/station-lists/sfstns.tbl', 'rt') as station_file:
 	for line in station_file:
 		# get the station ID
 		stid.append(line[:9].strip())
