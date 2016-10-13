@@ -283,7 +283,7 @@ warmestLon = []
 # we don't want to continuously add the same station over, and over
 # and over, and over, and over, and over, and over, and well you get the idea
 # in this file. 
-noLocFileRead = open("noLocation.txt", "r")
+noLocFileRead = open("/home/sburgholzer/noLocation.txt", "r")
 existingNoLoc = []
 for item in noLocFileRead:
 	temporary = item.rstrip()
@@ -292,7 +292,7 @@ for item in noLocFileRead:
 noLocFileRead.close()
 
 # now reopen the file, but this time to append to it!
-noLocFile = open("noLocation.txt", "a")
+noLocFile = open("/home/sburgholzer/noLocation.txt", "a")
 
 # get all the stuff we need for the KML
 for item in warmestStations:
@@ -376,7 +376,7 @@ coldestName = []
 coldestLat = []
 coldestLon = []
 
-noLocFileRead = open("noLocation.txt", "r")
+noLocFileRead = open("/home/sburgholzer/noLocation.txt", "r")
 existingNoLoc = []
 for item in noLocFileRead:
 	temporary = item.rstrip()
@@ -384,7 +384,7 @@ for item in noLocFileRead:
 
 noLocFileRead.close()
 
-noLocFile = open("noLocation.txt", "a")
+noLocFile = open("/home/sburgholzer/noLocation.txt", "a")
 
 for item in coldestStations:
 	if item in stid:
