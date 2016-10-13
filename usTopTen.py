@@ -4,7 +4,7 @@
 # Date:			    10/04/2016											 #
 # Descr:		    This will get the top ten warmest and top 10 coldest #
 #				    temperatures in the US  					         #
-# Last Modified:    10/04/2016 											 #
+# Last Modified:    10/13/2016 											 #
 # Last Modified by: Scott Burgholzer  									 #
 ##########################################################################
 #KN00 station is KFZY
