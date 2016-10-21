@@ -4,7 +4,7 @@
 # Date:			    08/31/2016 											 #
 # Descr:		    This will get the top ten warmest and top 10 coldest #
 #				    temperatures in the World  					         #
-# Last Modified:    10/13/2016 											 #
+# Last Modified:    10/21/2016 											 #
 # Last Modified by: Scott Burgholzer  									 #
 ##########################################################################
 
@@ -51,14 +51,19 @@ finalYesterday = yesterYr+"/"+str(yesterMo)+"/"+str(yesterDay)
 try:
 	hour = str(sys.argv[1])
 except:
-	print "\n\n\n\n\n\nPlease add a hour in the format of HH when executing the script!\n\n\n\n\n\n\n"
+	print "\n\n\n\n\n\nPlease add a hour in the format of YYYYMMDDHH when executing the script!\n\n\n\n\n\n\n"
 
 # NOTE!!!!!!!!
 # 02Z file that I downloaded might has a 058/M08 for OIFS.. earlier they were a 04/something... could it be tha\
 # they are doing 05.8/M08???? if 3 digits in front, then skip
 
+year = hour[0:4]
+month = hour[4:6]
+day = hour[6:8]
+hour = hour[8:10]
 
-# url of where we are getting our data (Using NOAA for now)
+
+# url of where we are getting our data (Using NOAA)
 url = 'http://tgftp.nws.noaa.gov/data/observations/metar/cycles/%sZ.TXT' % hour
 #url = 'http://wxsandbox1.cod.edu/sburgholzer/sao/%sZ.TXT' % hour
 
@@ -67,14 +72,14 @@ response = urllib2.urlopen(url)
 html = response.read()
 
 # open temporary output file
-outputfile = open('test.txt', 'w')
+outputfile = open('/home/sburgholzer/test.txt', 'w')
 # write our url response to the file
 outputfile.write(html)
 # close the file
 outputfile.close()
 
 # get the data in a list
-data = np.genfromtxt('test.txt', delimiter="\n", dtype=None)
+data = np.genfromtxt('/home/sburgholzer/test.txt', delimiter="\n", dtype=None)
 
 # two blank lists to hold temperature and station data
 temp = []
@@ -137,10 +142,6 @@ for linenum, line in enumerate(data):
 			startStn = re.search(r'[A-Z][A-Z0-9]{3}', str).start()
 			# get the end location of the station ID
 			endStn = re.search(r'[A-Z][A-Z0-9]{3}', str).end()
-			# get the start location of the Temp
-			startTmp = re.search(r'M?[0-9]{2}/M?[0-9]{2}', str).start()
-			# get the end location of the Temp
-			endTmp = re.search(r'M?[0-9]{2}/M?[0-9]{2}', str).end()
 			
 			# append the station ID to the the stns list
 			stns.append(str[startStn:endStn])
@@ -148,6 +149,10 @@ for linenum, line in enumerate(data):
 			# If there is no T group, then we want to have the temp
 			# into the temp list
 			if startTGroup == None:
+				# get the start location of the Temp
+				startTmp = re.search(r'M?[0-9]{2}/M?[0-9]{2}', str).start()
+				# get the end location of the Temp
+				endTmp = re.search(r'M?[0-9]{2}/M?[0-9]{2}', str).end()
 				tempStr = str[startTmp:endTmp]
 				# get the temp string, without the trailing /
 				tempStr = tempStr.split('/', 1)[0]
@@ -192,7 +197,7 @@ for linenum, line in enumerate(data):
 					temp.append(newStr)
 
 # Done with looping through the metars!
-
+os.remove('/home/sburgholzer/test.txt')
 # now to get rid of duplicate stations!
 stnArray = np.array(stns)
 tmpArray = np.array(temp)
@@ -439,7 +444,7 @@ f.write("</kml>\n")
 f.close()
 
 # now write the warmest and coldest to files for use in php script!
-output = open("warmest.txt", "w")
+output = open("/home/sburgholzer/warmest.txt", "w")
 for i, item in enumerate(warmest):
 	if (i+1) == len(warmest):
 		string = "%s," % item[0]
@@ -449,7 +454,7 @@ for i, item in enumerate(warmest):
 		string = string + "%s\n" % item[1]
 	output.write(string)
 output.close()
-output = open("coldest.txt", "w")
+output = open("/home/sburgholzer/coldest.txt", "w")
 for i, item in enumerate(coldest):
 	if (i+1) == len(coldest):
 		string = "%s," % item[0]
@@ -461,8 +466,8 @@ for i, item in enumerate(coldest):
 output.close()
 
 # put the hour in a file for use in PHP script
-output = open("topTenHour.txt", "w")
-string = hour + "Z"
+output = open("/home/sburgholzer/topTenHour.txt", "w")
+string = "%s-%s-%s %sZ" % (year, month, day, hour)
 output.write(string)
 # close all fileS!!!
 output.close()
